@@ -1,0 +1,146 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "BenefitsAgent Tools",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://benefits-tools.1w2eyx9x9yd2.us-south.codeengine.appdomain.cloud/",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/historical-procedures": {
+      "post": {
+        "summary": "This tool enables intelligent analysis and summarization of the historical procedures dataset.",
+        "description": "This tool enables intelligent analysis and summarization of the historical procedures dataset.\n### Key Features\n- Filtering on any combination of columns\n- Grouping and aggregation of results\n### Dataset Overview\nDetected columns:\n- **member_name**: e.g., Alice, Bob, Charlie...\n- **relationship**: e.g., Mother, Father, Son...\n- **age**: e.g., 42, 45, 12...\n- **gender**: e.g., Female, Male\n- **procedure**: e.g., Annual Physical Exam, Appendectomy, CT Scan...\n- **procedure_type**: e.g., preventive, surgery, diagnostic...\n- **location**: e.g., City Hospital, Green Valley Clinic, Sunrise Health...\n- **date**: e.g., 2024-04-28, 2023-05-02, 2022-05-11...\n- **in_network**: e.g., True, False\n- **member_plan**: e.g., Gold PPO, Family Plan - Silver EPO\n- **accepted_plans**: e.g., Gold PPO, Family Plan - Silver EPO, Medicare Advantage, Gold PPO, Family Plan - Silver EPO, Family Plan - Silver EPO, Medicare Advantage...\n- **cost_facility**: e.g., 29.4, 48.02, 30.8...\n- **cost_physician**: e.g., 199.09, 189.75, 128.9...\n- **cost_anesthesia**: e.g., 0.0, 2024.21, 2257.4...\n- **cost_medication**: e.g., 4.19, 5.53, 7.15...\n- **total_cost**: e.g., 232.68, 243.3, 166.85...\n- **facility_rating**: e.g., 4.7, 4.5, 4.6...\n- **notes**: e.g., Annual Physical Exam performed at City Hospital., Appendectomy performed at City Hospital., CT Scan performed at Green Valley Clinic....\n### Example Input:\n```json\n{\"filters\": [{\"column\": \"member_name\", \"operator\": \"equals\", \"value\": \"Alice\"}]}\n```\nExample Questions:\n- \"What rows match member_name = Alice?\" \u2192 `{\"filters\": [{\"column\": \"member_name\", \"operator\": \"equals\", \"value\": \"Alice\"}]}`",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcedureQuery"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/available-procedures": {
+      "post": {
+        "summary": "This tool enables intelligent analysis and summarization of the available procedures dataset.",
+        "description": "This tool enables intelligent analysis and summarization of the available procedures dataset.\n### Key Features\n- Filtering on any combination of columns\n- Grouping and aggregation of results\n### Dataset Overview\nDetected columns:\n- **procedure**: e.g., Angioplasty, Annual Physical Exam, Appendectomy...",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcedureQuery"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/member-insights": {
+      "get": {
+        "summary": "Returns member data including plan information and overdue procedures.",
+        "description": "Returns member data including:\n- Plan information (medical, pharmacy, mental health, wellness, tax documents)\n- Overdue preventive procedures",
+        "responses": {
+          "200": {
+            "description": "Member profile and plan data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/schedule": {
+      "get": {
+        "summary": "Provides appointment scheduling guidance.",
+        "description": "Provides appointment scheduling guidelines to help users arrange medical visits through a live scheduling system.",
+        "responses": {
+          "200": {
+            "description": "Synthetic appointment instructions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ProcedureQuery": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "type": "string",
+            "description": "JSON-encoded list of filter objects",
+            "example": "[{\"column\": \"procedure\", \"operator\": \"equals\", \"value\": \"X ray\"}]"
+          },
+          "group_by": {
+            "type": "string",
+            "description": "JSON-encoded list of columns to group by",
+            "example": "[\"facility_rating\"]"
+          }
+        }
+      }
+    }
+  }
+}

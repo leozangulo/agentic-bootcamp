@@ -1,0 +1,355 @@
+openapi: 3.0.3
+info:
+  title: BenefitsAgent Tools
+  version: 1.0.0
+servers:
+- url: https://benefits-tools.1w2eyx9x9yd2.us-south.codeengine.appdomain.cloud
+  description: Local development server
+paths:
+  /historical-procedures:
+    post:
+      summary: This tool enables intelligent analysis and summarization of the historical
+        procedures dataset.
+      description: |-
+        This tool enables intelligent analysis and summarization of the historical procedures dataset.
+        ### Key Features
+        - Filtering on any combination of columns
+        - Grouping and aggregation of results
+        ### Dataset Overview
+        Detected columns:
+        - **member_name**: e.g., Alice, Bob, Charlie...
+        - **relationship**: e.g., Mother, Father, Son...
+        - **age**: e.g., 42, 45, 12...
+        - **gender**: e.g., Female, Male
+        - **procedure**: e.g., Annual Physical Exam, Appendectomy, CT Scan...
+        - **procedure_type**: e.g., preventive, surgery, diagnostic...
+        - **location**: e.g., City Hospital, Green Valley Clinic, Sunrise Health...
+        - **date**: e.g., 2024-04-28, 2023-05-02, 2022-05-11...
+        - **in_network**: e.g., True, False
+        - **member_plan**: e.g., Gold PPO, Family Plan - Silver EPO
+        - **accepted_plans**: e.g., Gold PPO, Family Plan - Silver EPO, Medicare Advantage, Gold PPO, Family Plan - Silver EPO, Family Plan - Silver EPO, Medicare Advantage...
+        - **cost_facility**: e.g., 29.4, 48.02, 30.8...
+        - **cost_physician**: e.g., 199.09, 189.75, 128.9...
+        - **cost_anesthesia**: e.g., 0.0, 2024.21, 2257.4...
+        - **cost_medication**: e.g., 4.19, 5.53, 7.15...
+        - **total_cost**: e.g., 232.68, 243.3, 166.85...
+        - **facility_rating**: e.g., 4.7, 4.5, 4.6...
+        - **notes**: e.g., Annual Physical Exam performed at City Hospital., Appendectomy performed at City Hospital., CT Scan performed at Green Valley Clinic....
+        ### Example Input:
+        ```json
+        {
+          "filters": [
+            {
+              "column": "member_name",
+              "operator": "equals",
+              "value": "Alice"
+            }
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "member_name",
+              "operator": "contains",
+              "value": "Ali"
+            }
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "member_name",
+              "operator": "ne",
+              "value": "Alice"
+            }
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "age",
+              "operator": "gt",
+              "value": 22.69
+            }
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "age",
+              "operator": "lt",
+              "value": 27.73
+            }
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "age",
+              "operator": "ge",
+              "value": 25
+            }
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "age",
+              "operator": "le",
+              "value": 25
+            }
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "age",
+              "operator": "ne",
+              "value": 25
+            }
+          ]
+        }
+        {
+          "group_by": [
+            "member_name",
+            "relationship"
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "member_name",
+              "operator": "equals",
+              "value": "Alice"
+            },
+            {
+              "column": "age",
+              "operator": "ge",
+              "value": 12.0
+            }
+          ],
+          "group_by": [
+            "relationship"
+          ]
+        }
+        ```
+        Example Questions:
+        - "What rows match member_name = Alice?" → `{"filters": [{"column": "member_name", "operator": "equals", "value": "Alice"}]}`
+        - "What rows do not match member_name = Alice?" → `{"filters": [{"column": "member_name", "operator": "ne", "value": "Alice"}]}`
+        - "What rows contain 'Ali' in member_name?" → `{"filters": [{"column": "member_name", "operator": "contains", "value": "Ali"}]}`
+        - "What rows have age greater than 25.21?" → `{"filters": [{"column": "age", "operator": "gt", "value": 25.21}]}`
+        - "What rows have age less than 25.21?" → `{"filters": [{"column": "age", "operator": "lt", "value": 25.21}]}`
+        - "What rows have age greater than or equal to 25.21?" → `{"filters": [{"column": "age", "operator": "ge", "value": 25.21}]}`
+        - "What rows have age less than or equal to 25.21?" → `{"filters": [{"column": "age", "operator": "le", "value": 25.21}]}`
+        - "What rows do not have age equal to 25.21?" → `{"filters": [{"column": "age", "operator": "ne", "value": 25.21}]}`
+        - "What is the average of age grouped by member_name?" → `{"group_by": ["member_name"]}`
+        - "What is the total age for member_name = 25.210526315789473 grouped by relationship?" → `{"filters": [{"column": "member_name", "operator": "equals", "value": "25.210526315789473"}], "group_by": ["relationship"]}`
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcedureQuery'
+      responses:
+        '200':
+          description: Successful result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+  /available-procedures:
+    post:
+      summary: This tool enables intelligent analysis and summarization of the available
+        procedures dataset.
+      description: |-
+        This tool enables intelligent analysis and summarization of the available procedures dataset.
+        ### Key Features
+        - Filtering on any combination of columns
+        - Grouping and aggregation of results
+        ### Dataset Overview
+        Detected columns:
+        - **procedure**: e.g., Angioplasty, Annual Physical Exam, Appendectomy...
+        - **location**: e.g., City Hospital, Regional Medical Center, Green Valley Clinic...
+        - **facility_rating**: e.g., 4.7, 4.3, 4.5...
+        - **distance_miles**: e.g., 5.2, 12.6, 1.2...
+        - **gold_ppo_plan_accepted**: e.g., True, False
+        - **silver_epo_plan_accepted**: e.g., True
+        - **accepted_plans**: e.g., Gold PPO, Family Plan - Silver EPO, Medicare Advantage, Family Plan - Silver EPO, Bronze HDHP, Medicaid, Gold PPO, Family Plan - Silver EPO...
+        - **cost_facility**: e.g., 9432.8, 23594.95, 3807.32...
+        - **cost_physician**: e.g., 4774.57, 4897.27, 5687.8...
+        - **cost_anesthesia**: e.g., 1894.37, 581.04, 293.41...
+        - **cost_medication**: e.g., 834.8, 783.86, 1301.58...
+        - **total_cost**: e.g., 16936.54, 29857.12, 11090.11...
+        ### Example Input:
+        ```json
+        {
+          "filters": [
+            {
+              "column": "procedure",
+              "operator": "equals",
+              "value": "Angioplasty"
+            }
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "procedure",
+              "operator": "contains",
+              "value": "Ang"
+            }
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "procedure",
+              "operator": "ne",
+              "value": "Angioplasty"
+            }
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "facility_rating",
+              "operator": "gt",
+              "value": 4.01
+            }
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "facility_rating",
+              "operator": "lt",
+              "value": 4.9
+            }
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "facility_rating",
+              "operator": "ge",
+              "value": 4
+            }
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "facility_rating",
+              "operator": "le",
+              "value": 4
+            }
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "facility_rating",
+              "operator": "ne",
+              "value": 4
+            }
+          ]
+        }
+        {
+          "group_by": [
+            "procedure",
+            "location"
+          ]
+        }
+        {
+          "filters": [
+            {
+              "column": "procedure",
+              "operator": "equals",
+              "value": "Angioplasty"
+            },
+            {
+              "column": "facility_rating",
+              "operator": "ge",
+              "value": 4.5
+            }
+          ],
+          "group_by": [
+            "location"
+          ]
+        }
+        ```
+        Example Questions:
+        - "What rows match procedure = Angioplasty?" → `{"filters": [{"column": "procedure", "operator": "equals", "value": "Angioplasty"}]}`
+        - "What rows do not match procedure = Angioplasty?" → `{"filters": [{"column": "procedure", "operator": "ne", "value": "Angioplasty"}]}`
+        - "What rows contain 'Ang' in procedure?" → `{"filters": [{"column": "procedure", "operator": "contains", "value": "Ang"}]}`
+        - "What rows have facility_rating greater than 4.45?" → `{"filters": [{"column": "facility_rating", "operator": "gt", "value": 4.45}]}`
+        - "What rows have facility_rating less than 4.45?" → `{"filters": [{"column": "facility_rating", "operator": "lt", "value": 4.45}]}`
+        - "What rows have facility_rating greater than or equal to 4.45?" → `{"filters": [{"column": "facility_rating", "operator": "ge", "value": 4.45}]}`
+        - "What rows have facility_rating less than or equal to 4.45?" → `{"filters": [{"column": "facility_rating", "operator": "le", "value": 4.45}]}`
+        - "What rows do not have facility_rating equal to 4.45?" → `{"filters": [{"column": "facility_rating", "operator": "ne", "value": 4.45}]}`
+        - "What is the average of facility_rating grouped by procedure?" → `{"group_by": ["procedure"]}`
+        - "What is the total facility_rating for procedure = 4.450442477876106 grouped by location?" → `{"filters": [{"column": "procedure", "operator": "equals", "value": "4.450442477876106"}], "group_by": ["location"]}`
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcedureQuery'
+      responses:
+        '200':
+          description: Successful result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+  /member-insights:
+    get:
+      summary: Returns member data including plan information and overdue procedures.
+      description: |-
+        Returns member data including:
+        - Plan information (medical, pharmacy, mental health, wellness, tax documents)
+        - Overdue preventive procedures
+      responses:
+        '200':
+          description: Member profile and plan data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+  /schedule:
+    get:
+      summary: Provides appointment scheduling guidance.
+      description: Provides appointment scheduling guidelines to help users arrange
+        medical visits through a live scheduling system.
+      responses:
+        '200':
+          description: Synthetic appointment instructions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+components:
+  schemas:
+    ProcedureQuery:
+      type: object
+      properties:
+        filters:
+          type: string
+          description: JSON-encoded list of filter objects
+          example: '[{"column": "procedure", "operator": "equals", "value": "X ray"}]'
+        group_by:
+          type: string
+          description: JSON-encoded list of columns to group by
+          example: '["facility_rating"]'
